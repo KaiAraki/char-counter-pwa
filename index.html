@@ -7,25 +7,34 @@
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f6f6f6">
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;line-height:1.6}
-    h1{font-size:1.3rem;margin:0 0 12px}
-    textarea{width:100%;min-height:40vh;padding:12px;font-size:1rem}
-    .stats{display:flex;gap:16px;margin:8px 0}
-    .box{padding:8px 12px;border:1px solid #ddd;border-radius:8px;background:#fff}
-    button{padding:8px 12px;border:1px solid #ddd;border-radius:6px;background:#fafafa}
-    footer{margin-top:16px;color:#666;font-size:.9rem}
+    :root{color-scheme:light}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;line-height:1.6;background:#f6f6f6}
+    .wrap{max-width:720px;margin:0 auto;padding:clamp(16px,5vw,32px)}
+    h1{font-size:clamp(1.2rem,4vw,1.6rem);margin:0 0 12px}
+    textarea{width:100%;min-height:clamp(260px,45vh,520px);padding:12px;font-size:clamp(1rem,3.3vw,1.1rem);border-radius:10px;border:1px solid #ddd;box-sizing:border-box;background:#fff}
+    .stats{display:grid;gap:12px;margin:12px 0;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+    .box{padding:10px 12px;border:1px solid #ddd;border-radius:8px;background:#fff}
+    button{padding:10px 12px;border:1px solid #ddd;border-radius:8px;background:#fafafa;cursor:pointer;transition:background .2s;width:100%;display:flex;justify-content:center;align-items:center;margin-top:8px}
+    button:hover{background:#f0f0f0}
+    footer{margin-top:20px;color:#666;font-size:clamp(.85rem,3vw,.95rem)}
+    @media (min-width:720px){
+      .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+      button{width:auto;display:inline-flex}
+    }
   </style>
 </head>
 <body>
-  <h1>文字数カウンター（PWA）</h1>
-  <textarea id="t" placeholder="ここに文章を入力／貼り付け"></textarea>
-  <div class="stats">
-    <div class="box">文字数：<strong id="chars">0</strong></div>
-    <div class="box">行数：<strong id="lines">0</strong></div>
-    <div class="box">単語数：<strong id="words">0</strong></div>
-  </div>
-  <button id="clear">クリア</button>
-  <footer>オフラインでも使えます。ホーム画面に追加するとアプリ風に使えます。</footer>
+  <main class="wrap">
+    <h1>文字数カウンター（PWA）</h1>
+    <textarea id="t" placeholder="ここに文章を入力／貼り付け"></textarea>
+    <div class="stats">
+      <div class="box">文字数：<strong id="chars">0</strong></div>
+      <div class="box">行数：<strong id="lines">0</strong></div>
+      <div class="box">単語数：<strong id="words">0</strong></div>
+    </div>
+    <button id="clear">クリア</button>
+    <footer>オフラインでも使えます。ホーム画面に追加するとアプリ風に使えます。</footer>
+  </main>
 
   <script>
     const $ = s => document.querySelector(s);
