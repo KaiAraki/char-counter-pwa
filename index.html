@@ -6,34 +6,264 @@
   <title>文字数カウンター</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f6f6f6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{color-scheme:light}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;line-height:1.6;background:#f6f6f6}
-    .wrap{max-width:720px;margin:0 auto;padding:clamp(16px,5vw,32px)}
-    h1{font-size:clamp(1.2rem,4vw,1.6rem);margin:0 0 12px}
-    textarea{width:100%;min-height:clamp(260px,45vh,520px);padding:12px;font-size:clamp(1rem,3.3vw,1.1rem);border-radius:10px;border:1px solid #ddd;box-sizing:border-box;background:#fff}
-    .stats{display:grid;gap:12px;margin:12px 0;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
-    .box{padding:10px 12px;border:1px solid #ddd;border-radius:8px;background:#fff}
-    button{padding:10px 12px;border:1px solid #ddd;border-radius:8px;background:#fafafa;cursor:pointer;transition:background .2s;width:100%;display:flex;justify-content:center;align-items:center;margin-top:8px}
-    button:hover{background:#f0f0f0}
-    footer{margin-top:20px;color:#666;font-size:clamp(.85rem,3vw,.95rem)}
-    @media (min-width:720px){
-      .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
-      button{width:auto;display:inline-flex}
+    :root {
+      color-scheme: light;
+      --bg-gradient: linear-gradient(135deg, #b1c8ff 0%, #f7d4f5 48%, #fff5c2 100%);
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --border: rgba(255, 255, 255, 0.45);
+      --text-main: #2c2c30;
+      --text-sub: #4f4f57;
+      --accent: #5b63ff;
+      --accent-dark: #3c3fca;
+      --shadow: 0 25px 45px rgba(38, 45, 74, 0.15);
+      --radius-lg: 26px;
+      --radius-md: 18px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Noto Sans JP", "Hiragino Sans", "ヒラギノ角ゴ ProN", "Yu Gothic", YuGothic, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      line-height: 1.7;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(24px, 5vw, 48px);
+    }
+    .wrap {
+      width: min(960px, 100%);
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: clamp(24px, 4vw, 48px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: clamp(20px, 4vw, 36px);
+    }
+    .headline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .headline-icon {
+      width: clamp(38px, 6vw, 52px);
+      height: clamp(38px, 6vw, 52px);
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--surface-strong);
+      box-shadow: 0 12px 25px rgba(91, 99, 255, 0.15);
+      color: var(--accent);
+    }
+    .headline small {
+      display: block;
+      font-size: clamp(0.65rem, 2.1vw, 0.78rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    header p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: clamp(0.92rem, 2.6vw, 1.05rem);
+    }
+    textarea {
+      width: 100%;
+      min-height: clamp(260px, 45vh, 480px);
+      padding: clamp(16px, 3.8vw, 22px);
+      font-size: clamp(1rem, 3.3vw, 1.08rem);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      resize: vertical;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: rgba(91, 99, 255, 0.6);
+      box-shadow: 0 0 0 4px rgba(91, 99, 255, 0.18);
+    }
+    textarea::placeholder {
+      color: rgba(79, 79, 87, 0.55);
+    }
+    .stats {
+      display: grid;
+      gap: clamp(14px, 2.4vw, 20px);
+      margin: clamp(18px, 3vw, 28px) 0;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .box {
+      padding: clamp(14px, 2.6vw, 20px);
+      border-radius: var(--radius-md);
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(38, 45, 74, 0.08);
+    }
+    .box::after {
+      content: "";
+      position: absolute;
+      inset: -60% 60% 60% -60%;
+      background: radial-gradient(circle at top left, rgba(91, 99, 255, 0.18), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .box:hover::after {
+      opacity: 1;
+    }
+    .box strong {
+      display: block;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      margin-top: 6px;
+      letter-spacing: 0.03em;
+    }
+    .box span {
+      display: block;
+      color: var(--text-sub);
+      font-size: 0.92rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    button {
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent) 0%, #7a7fff 100%);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 18px 30px rgba(91, 99, 255, 0.25);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 36px rgba(60, 63, 202, 0.28);
+      filter: brightness(1.05);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 14px 20px rgba(60, 63, 202, 0.22);
+    }
+    footer {
+      margin-top: clamp(24px, 4vw, 40px);
+      color: var(--text-sub);
+      font-size: clamp(0.85rem, 2.8vw, 0.96rem);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(91, 99, 255, 0.12);
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 640px) {
+      body {
+        padding: clamp(18px, 8vw, 32px);
+      }
+      .wrap {
+        padding: clamp(18px, 6vw, 32px);
+      }
+      .actions {
+        justify-content: stretch;
+      }
+      button {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
   <main class="wrap">
-    <h1>文字数カウンター（PWA）</h1>
+    <header>
+      <div class="headline">
+        <span class="headline-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L4 7V17L12 21L20 17V7L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M9 9H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M9 12H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M9 15H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <div>
+          <small>Creative Toolkit</small>
+          文字数カウンター（PWA）
+        </div>
+      </div>
+      <p>美しい文章づくりをサポートする、ミニマルで軽快なカウンター。リアルタイムで文字数・行数・単語数をチェックできます。</p>
+    </header>
+
     <textarea id="t" placeholder="ここに文章を入力／貼り付け"></textarea>
-    <div class="stats">
-      <div class="box">文字数：<strong id="chars">0</strong></div>
-      <div class="box">行数：<strong id="lines">0</strong></div>
-      <div class="box">単語数：<strong id="words">0</strong></div>
+
+    <div class="stats" aria-live="polite">
+      <div class="box">
+        <span>Character</span>
+        <strong id="chars">0</strong>
+      </div>
+      <div class="box">
+        <span>Lines</span>
+        <strong id="lines">0</strong>
+      </div>
+      <div class="box">
+        <span>Words</span>
+        <strong id="words">0</strong>
+      </div>
     </div>
-    <button id="clear">クリア</button>
-    <footer>オフラインでも使えます。ホーム画面に追加するとアプリ風に使えます。</footer>
+
+    <div class="actions">
+      <button id="clear" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 6V4H15V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M14 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M5 6L6 19C6.05535 19.5978 6.31954 20.1599 6.75041 20.58C7.18128 21.0002 7.75022 21.25 8.343 21.29H15.657C16.2498 21.25 16.8187 21.0002 17.2496 20.58C17.6805 20.1599 17.9447 19.5978 18 19L19 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        クリア
+      </button>
+    </div>
+
+    <footer>
+      <span class="badge">PWA Ready</span>
+      オフラインでも利用可能。ホーム画面に追加するとアプリのように使えます。
+    </footer>
   </main>
 
   <script>
