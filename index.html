@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>文字数カウンター</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#f6f6f6">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;line-height:1.6}
+    h1{font-size:1.3rem;margin:0 0 12px}
+    textarea{width:100%;min-height:40vh;padding:12px;font-size:1rem}
+    .stats{display:flex;gap:16px;margin:8px 0}
+    .box{padding:8px 12px;border:1px solid #ddd;border-radius:8px;background:#fff}
+    button{padding:8px 12px;border:1px solid #ddd;border-radius:6px;background:#fafafa}
+    footer{margin-top:16px;color:#666;font-size:.9rem}
+  </style>
+</head>
+<body>
+  <h1>文字数カウンター（PWA）</h1>
+  <textarea id="t" placeholder="ここに文章を入力／貼り付け"></textarea>
+  <div class="stats">
+    <div class="box">文字数：<strong id="chars">0</strong></div>
+    <div class="box">行数：<strong id="lines">0</strong></div>
+    <div class="box">単語数：<strong id="words">0</strong></div>
+  </div>
+  <button id="clear">クリア</button>
+  <footer>オフラインでも使えます。ホーム画面に追加するとアプリ風に使えます。</footer>
+
+  <script>
+    const $ = s => document.querySelector(s);
+    const t = $('#t'), chars = $('#chars'), lines = $('#lines'), words = $('#words');
+    function update(){
+      const v = t.value;
+      chars.textContent = [...v].length; // サロゲート対策
+      lines.textContent = v === '' ? 0 : v.split(/\r\n|\r|\n/).length;
+      const w = v.trim().split(/\s+/).filter(Boolean);
+      words.textContent = v.trim() ? w.length : 0;
+      localStorage.setItem('text', v); // 直近内容を保持
+    }
+    t.addEventListener('input', update);
+    $('#clear').addEventListener('click', ()=>{ t.value=''; update(); });
+
+    // 前回の内容を復元
+    t.value = localStorage.getItem('text') || '';
+    update();
+
+    // サービスワーカー登録（PWAのオフライン化）
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(console.error);
+      });
+    }
+  </script>
+</body>
+</html>
