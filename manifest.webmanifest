@@ -1,1 +1,10 @@
-
+{
+  "name": "文字数カウンター",
+  "short_name": "文字数",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "theme_color": "#f6f6f6",
+  "background_color": "#ffffff",
+  "description": "テキストの文字数・行数・単語数をすばやく数えるPWA"
+}
