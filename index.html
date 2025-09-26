@@ -407,6 +407,10 @@
       background: rgba(17, 22, 58, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       box-shadow: 0 25px 45px rgba(26, 22, 66, 0.28);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(10px, 2.6vw, 16px);
     }
     #game-board {
       width: 100%;
@@ -445,7 +449,9 @@
     }
     .game-touch-controls {
       display: none;
-      margin-top: 4px;
+      width: 100%;
+      margin-top: 0;
+      align-self: stretch;
     }
     .game-touch-grid {
       display: grid;
@@ -453,7 +459,8 @@
       grid-template-areas:
         "rotate rotate drop"
         "left down right";
-      gap: 12px;
+      gap: 8px;
+      width: 100%;
     }
     .game-touch-button {
       border: none;
@@ -461,12 +468,12 @@
       background: rgba(255, 255, 255, 0.92);
       color: var(--text-main);
       box-shadow: 0 16px 28px rgba(30, 32, 84, 0.18);
-      padding: 10px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
       font-weight: 600;
       letter-spacing: 0.04em;
       line-height: 1.1;
@@ -485,11 +492,11 @@
     .game-touch-button[data-area="down"] { grid-area: down; }
     .game-touch-button[data-area="right"] { grid-area: right; }
     .game-touch-icon {
-      font-size: 1.35rem;
+      font-size: 1.2rem;
     }
     .game-touch-text {
-      font-size: 0.76rem;
-      letter-spacing: 0.12em;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
     @media (max-width: 900px) {
@@ -523,10 +530,28 @@
         font-size: 0.88rem;
       }
       .game-touch-grid {
-        gap: 10px;
+        gap: 6px;
       }
       .game-touch-button {
-        padding: 10px 8px;
+        padding: 8px 6px;
+      }
+      .game-touch-icon {
+        font-size: 1.05rem;
+      }
+      .game-touch-text {
+        font-size: 0.64rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .game-touch-grid {
+        gap: 5px;
+      }
+      .game-touch-button {
+        padding: 7px 5px;
+        gap: 3px;
+      }
+      .game-touch-text {
+        letter-spacing: 0.08em;
       }
     }
     @media (min-width: 860px) {
@@ -625,24 +650,6 @@
       <div class="game-layout">
         <div class="game-canvas-wrap">
           <canvas id="game-board" width="240" height="432" aria-describedby="game-banner"></canvas>
-        </div>
-        <div class="game-info">
-          <p class="game-banner" id="game-banner">ゲームスタートを押して、ブロックショーを開演しよう！</p>
-          <div class="game-scoreboard">
-            <div class="box">
-              <span>Score</span>
-              <strong id="game-score">0</strong>
-            </div>
-            <div class="box">
-              <span>Lines</span>
-              <strong id="game-lines">0</strong>
-            </div>
-            <div class="box">
-              <span>Level</span>
-              <strong id="game-level">1</strong>
-            </div>
-          </div>
-          <p class="game-instruction">矢印キーで移動＆回転（上キー）。スペースキーで一気にドロップ！音は出ないので静かな場所でも安心です。</p>
           <div class="game-touch-controls" aria-label="タッチ操作ボタン">
             <div class="game-touch-grid">
               <button class="game-touch-button" type="button" data-control="rotate" data-area="rotate" aria-label="回転">
@@ -667,6 +674,24 @@
               </button>
             </div>
           </div>
+        </div>
+        <div class="game-info">
+          <p class="game-banner" id="game-banner">ゲームスタートを押して、ブロックショーを開演しよう！</p>
+          <div class="game-scoreboard">
+            <div class="box">
+              <span>Score</span>
+              <strong id="game-score">0</strong>
+            </div>
+            <div class="box">
+              <span>Lines</span>
+              <strong id="game-lines">0</strong>
+            </div>
+            <div class="box">
+              <span>Level</span>
+              <strong id="game-level">1</strong>
+            </div>
+          </div>
+          <p class="game-instruction">矢印キーで移動＆回転（上キー）。スペースキーで一気にドロップ！音は出ないので静かな場所でも安心です。</p>
           <button id="game-start" type="button">ゲームスタート／リスタート</button>
         </div>
       </div>
