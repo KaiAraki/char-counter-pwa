@@ -1229,24 +1229,35 @@
     navButtons.forEach(btn => {
       btn.addEventListener('click', () => switchView(btn.dataset.nav));
     });
+    const shouldPreventPointerDefault = event => {
+      return event.pointerType !== 'touch';
+    };
     if (controlButtons.length) {
       controlButtons.forEach(button => {
         const action = button.dataset.control;
         if (!action) return;
         if (holdableControls.has(action)) {
           button.addEventListener('pointerdown', event => {
-            event.preventDefault();
+            if (shouldPreventPointerDefault(event)) {
+              event.preventDefault();
+            }
             startControlHold(action);
           });
           button.addEventListener('pointerup', event => {
-            event.preventDefault();
+            if (shouldPreventPointerDefault(event)) {
+              event.preventDefault();
+            }
             stopControlHold();
           });
           button.addEventListener('pointerleave', stopControlHold);
           button.addEventListener('pointercancel', stopControlHold);
           button.addEventListener('click', event => event.preventDefault());
         } else {
-          button.addEventListener('pointerdown', event => event.preventDefault());
+          button.addEventListener('pointerdown', event => {
+            if (shouldPreventPointerDefault(event)) {
+              event.preventDefault();
+            }
+          });
           button.addEventListener('click', event => {
             event.preventDefault();
             triggerControl(action);
