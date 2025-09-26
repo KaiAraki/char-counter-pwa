@@ -1677,10 +1677,21 @@
 
     function merge(arena, player) {
       player.matrix.forEach((row, y) => {
+        const targetY = y + player.pos.y;
+        if (targetY < 0 || targetY >= arena.length) {
+          return;
+        }
+        const arenaRow = arena[targetY];
+        if (!Array.isArray(arenaRow)) {
+          return;
+        }
         row.forEach((value, x) => {
-          if (value !== 0) {
-            arena[y + player.pos.y][x + player.pos.x] = value;
+          if (value === 0) return;
+          const targetX = x + player.pos.x;
+          if (targetX < 0 || targetX >= arenaRow.length) {
+            return;
           }
+          arenaRow[targetX] = value;
         });
       });
     }
