@@ -859,6 +859,11 @@
     const COLS = 10;
     const ROWS = 18;
     const BLOCK_SIZE = 24;
+    const DEFAULT_CANVAS_WIDTH = canvas ? canvas.width : COLS * BLOCK_SIZE;
+    const DEFAULT_CANVAS_HEIGHT = canvas ? canvas.height : ROWS * BLOCK_SIZE;
+    const DEFAULT_CANVAS_ASPECT = DEFAULT_CANVAS_WIDTH > 0
+      ? DEFAULT_CANVAS_HEIGHT / DEFAULT_CANVAS_WIDTH
+      : ROWS / COLS;
     function hexToRgb(hex) {
       if (!hex) return [1, 1, 1];
       const normalized = hex.replace('#', '');
@@ -1136,16 +1141,22 @@
     function resizeWebGLCanvas(glContext, canvasElement) {
       if (!canvasElement) return false;
       const dpr = window.devicePixelRatio || 1;
-      const clientWidth = canvasElement.clientWidth || canvasElement.width;
+      const clientWidth = Math.round(canvasElement.clientWidth);
+      if (!clientWidth) {
+        return false;
+      }
       let clientHeight = canvasElement.clientHeight;
       if (!clientHeight) {
         const aspectRatio = canvasElement.height && canvasElement.width
           ? canvasElement.height / canvasElement.width
-          : ROWS / COLS;
+          : DEFAULT_CANVAS_ASPECT;
         clientHeight = clientWidth * aspectRatio;
       }
-      const displayWidth = Math.floor(clientWidth * dpr);
-      const displayHeight = Math.floor(clientHeight * dpr);
+      if (!clientHeight || !isFinite(clientHeight)) {
+        return false;
+      }
+      const displayWidth = Math.max(1, Math.round(clientWidth * dpr));
+      const displayHeight = Math.max(1, Math.round(clientHeight * dpr));
       if (canvasElement.width !== displayWidth || canvasElement.height !== displayHeight) {
         canvasElement.width = displayWidth;
         canvasElement.height = displayHeight;
