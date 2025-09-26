@@ -1136,8 +1136,16 @@
     function resizeWebGLCanvas(glContext, canvasElement) {
       if (!canvasElement) return false;
       const dpr = window.devicePixelRatio || 1;
-      const displayWidth = Math.floor(canvasElement.clientWidth * dpr);
-      const displayHeight = Math.floor(canvasElement.clientHeight * dpr);
+      const clientWidth = canvasElement.clientWidth || canvasElement.width;
+      let clientHeight = canvasElement.clientHeight;
+      if (!clientHeight) {
+        const aspectRatio = canvasElement.height && canvasElement.width
+          ? canvasElement.height / canvasElement.width
+          : ROWS / COLS;
+        clientHeight = clientWidth * aspectRatio;
+      }
+      const displayWidth = Math.floor(clientWidth * dpr);
+      const displayHeight = Math.floor(clientHeight * dpr);
       if (canvasElement.width !== displayWidth || canvasElement.height !== displayHeight) {
         canvasElement.width = displayWidth;
         canvasElement.height = displayHeight;
