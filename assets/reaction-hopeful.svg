@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="hope-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f1ff"/>
+      <stop offset="55%" stop-color="#d6c9ff"/>
+      <stop offset="100%" stop-color="#b19cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="40" fill="url(#hope-bg)"/>
+  <circle cx="56" cy="72" r="9" fill="#45308d"/>
+  <circle cx="104" cy="72" r="9" fill="#45308d"/>
+  <path d="M44 98c12 18 60 18 72 0" fill="none" stroke="#644ac4" stroke-width="8" stroke-linecap="round"/>
+  <path d="M80 40l8 18h-16l8-18z" fill="#fff" opacity="0.7"/>
+  <path d="M36 54c12-12 30-20 44-20s32 8 44 20" fill="none" stroke="#dcd1ff" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="40" cy="120" r="8" fill="#e8e0ff" opacity="0.6"/>
+  <circle cx="120" cy="120" r="10" fill="#e8e0ff" opacity="0.6"/>
+</svg>

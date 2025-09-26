@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="energetic-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8e1"/>
+      <stop offset="50%" stop-color="#ffe19a"/>
+      <stop offset="100%" stop-color="#ffc06a"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="40" fill="url(#energetic-bg)"/>
+  <path d="M40 52l12-18 12 10 10-16 14 14 14-16 12 20" fill="none" stroke="#ff8b1f" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="55" cy="74" r="9" fill="#7a3600"/>
+  <circle cx="105" cy="74" r="9" fill="#7a3600"/>
+  <path d="M60 104c8 10 32 10 40 0" fill="none" stroke="#aa4a00" stroke-width="8" stroke-linecap="round"/>
+  <path d="M52 122c12 10 44 10 56 0" fill="none" stroke="#ffd8a0" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+</svg>
