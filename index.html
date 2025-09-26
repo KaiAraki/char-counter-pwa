@@ -908,7 +908,7 @@
     const BLOCK_WORLD_SIZE = 0.9;
     const BLOCK_WORLD_GAP = 1.04;
     const BOARD_DEPTH_OFFSET = -0.4;
-    const CAMERA_EYE = [0, 6.2, 20.5];
+    const CAMERA_EYE = [0, 0.8, 19.6];
     const CAMERA_CENTER = [0, 0, 0];
     const CAMERA_UP = [0, 1, 0];
     const webglState = gl ? initWebGL(gl) : null;
@@ -1553,8 +1553,8 @@
     function drawClearEffects(now) {
       if (!gl || !webglState || clearEffects.length === 0) return;
       gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
       gl.depthMask(false);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
       for (let i = clearEffects.length - 1; i >= 0; i--) {
         const effect = clearEffects[i];
         const progress = (now - effect.start) / CLEAR_EFFECT_DURATION;
@@ -1563,12 +1563,57 @@
           continue;
         }
         const intensity = 1 - progress;
-        const basePosition = getBlockWorldPosition((COLS - 1) / 2, effect.row, BOARD_DEPTH_OFFSET + 0.15 - progress * 0.25);
+        const wave = Math.sin(progress * Math.PI * 4);
+        const basePosition = getBlockWorldPosition((COLS - 1) / 2, effect.row, BOARD_DEPTH_OFFSET + 0.18 - progress * 0.32);
         const width = COLS * BLOCK_WORLD_GAP + 0.6;
         const height = BLOCK_WORLD_GAP * 0.9;
-        const color = [1.0, 0.92, 0.68];
-        drawPrimitive([basePosition[0], basePosition[1], basePosition[2]], [width, height, 0.4], color, 0.35 * intensity);
+        const burstScale = 1 + progress * 1.45;
+        const rippleScale = 1 + progress * 2.1;
+
+        drawPrimitive(
+          [basePosition[0], basePosition[1], basePosition[2] - 0.12],
+          [width * burstScale, height * (0.6 + progress * 1.25), 0.22],
+          [1.0, 0.82, 0.4],
+          0.42 * intensity
+        );
+
+        drawPrimitive(
+          [basePosition[0], basePosition[1], basePosition[2] + 0.04],
+          [width * (0.75 + progress * 0.85), height * (0.42 + progress), 0.16],
+          [0.66 + 0.2 * intensity, 0.78, 1.0],
+          0.34 * intensity * (1 + wave * 0.22)
+        );
+
+        const flash = Math.max(0, 1 - progress * 1.35);
+        drawPrimitive(
+          [basePosition[0], basePosition[1], basePosition[2] + 0.12],
+          [width * (0.5 + wave * 0.12), height * (0.3 + wave * 0.12), 0.12],
+          [1.0, 0.98, 0.9],
+          0.55 * flash
+        );
+
+        const beamCount = 5;
+        for (let b = 0; b < beamCount; b++) {
+          const offsetRatio = beamCount === 1 ? 0 : (b - (beamCount - 1) / 2) / (beamCount - 1);
+          const xOffset = offsetRatio * width * (0.8 + progress * 0.45);
+          const beamHeight = height * (1.2 + progress * 1.65 + Math.sin(progress * Math.PI * 3 + b) * 0.35);
+          const beamAlpha = 0.3 * intensity * (1 - Math.abs(offsetRatio) * 0.35);
+          drawPrimitive(
+            [basePosition[0] + xOffset, basePosition[1], basePosition[2] + 0.18],
+            [BLOCK_WORLD_SIZE * (0.6 + progress * 0.55), beamHeight, 0.1],
+            [1.0, 0.88, 0.6 + 0.2 * Math.sin(progress * Math.PI * 5 + b)],
+            beamAlpha
+          );
+        }
+
+        drawPrimitive(
+          [basePosition[0], basePosition[1], basePosition[2] + 0.22],
+          [width * rippleScale, height * (0.32 + progress * 1.4), 0.08],
+          [1.0, 0.68 + 0.32 * intensity, 0.96],
+          0.22 * intensity
+        );
       }
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
       gl.depthMask(true);
       gl.disable(gl.BLEND);
     }
