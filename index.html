@@ -835,8 +835,21 @@
       btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
+    function getWebGLContext(canvasElement) {
+      if (!canvasElement) return null;
+      const contextAttributes = { antialias: true, alpha: true };
+      const contextNames = ['webgl', 'experimental-webgl'];
+      for (const name of contextNames) {
+        const context = canvasElement.getContext(name, contextAttributes);
+        if (context) {
+          return context;
+        }
+      }
+      return null;
+    }
+
     const canvas = document.getElementById('game-board');
-    const gl = canvas ? canvas.getContext('webgl', { antialias: true, alpha: true }) : null;
+    const gl = getWebGLContext(canvas);
     const gameScoreEl = $('#game-score');
     const gameLinesEl = $('#game-lines');
     const gameLevelEl = $('#game-level');
