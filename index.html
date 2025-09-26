@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>文字数カウンター</title>
+  <title>文字アドベンチャーラボ</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f6f6f6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,9 +35,11 @@
       background: var(--bg-gradient);
       color: var(--text-main);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: clamp(24px, 5vw, 48px);
+      padding-bottom: clamp(120px, 22vh, 160px);
       position: relative;
       overflow: hidden;
     }
@@ -88,6 +90,12 @@
       position: relative;
       overflow: hidden;
       isolation: isolate;
+    }
+    [data-view] {
+      display: none;
+    }
+    [data-view].is-active {
+      display: block;
     }
     header {
       display: flex;
@@ -325,9 +333,119 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+    .global-nav {
+      position: fixed;
+      left: 50%;
+      bottom: clamp(16px, 5vw, 32px);
+      transform: translateX(-50%);
+      width: min(640px, calc(100% - clamp(24px, 10vw, 80px)));
+      z-index: 20;
+    }
+    .global-nav-inner {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 999px;
+      background: rgba(15, 14, 43, 0.18);
+      box-shadow: 0 25px 45px rgba(24, 27, 58, 0.16);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .nav-button {
+      flex: 1;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--text-main);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 12px 16px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+    }
+    .nav-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 26px rgba(56, 63, 146, 0.22);
+    }
+    .nav-button.is-active {
+      background: linear-gradient(135deg, #5b63ff 0%, #ff8ade 100%);
+      color: #fff;
+      box-shadow: 0 18px 32px rgba(91, 99, 255, 0.35);
+    }
+    .nav-button span {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+    }
+    .nav-button strong {
+      font-size: 0.96rem;
+      letter-spacing: 0.08em;
+    }
+    .nav-icon {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+    }
+    .game-layout {
+      display: grid;
+      gap: clamp(20px, 3.6vw, 32px);
+      align-items: start;
+    }
+    .game-canvas-wrap {
+      position: relative;
+      border-radius: var(--radius-md);
+      padding: clamp(18px, 3vw, 26px);
+      background: rgba(17, 22, 58, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 25px 45px rgba(26, 22, 66, 0.28);
+    }
+    #game-board {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: rgba(8, 9, 30, 0.92);
+      border-radius: 12px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      image-rendering: pixelated;
+    }
+    .game-info {
+      display: grid;
+      gap: clamp(16px, 3vw, 24px);
+    }
+    .game-scoreboard {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    .game-scoreboard .box {
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 18px 32px rgba(28, 30, 82, 0.18);
+    }
+    .game-banner {
+      margin: 0;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: rgba(91, 99, 255, 0.12);
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+    .game-instruction {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 0.92rem;
+    }
     @media (max-width: 640px) {
       body {
         padding: clamp(18px, 8vw, 32px);
+        padding-bottom: clamp(120px, 30vw, 220px);
       }
       .wrap {
         padding: clamp(18px, 6vw, 32px);
@@ -339,74 +457,161 @@
         width: 100%;
         justify-content: center;
       }
+      .global-nav-inner {
+        gap: 8px;
+        padding: 12px;
+      }
+      .nav-button {
+        padding: 10px 12px;
+      }
+    }
+    @media (min-width: 860px) {
+      .game-layout {
+        grid-template-columns: minmax(0, 0.95fr) minmax(220px, 0.85fr);
+      }
     }
   </style>
 </head>
 <body>
   <main class="wrap">
-    <header>
-      <div class="headline">
-        <span class="headline-icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3L4 7V17L12 21L20 17V7L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M9 9H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M9 12H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M9 15H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <div>
-          <small>Creative Toolkit</small>
-          文字数カウンター（PWA）
+    <section class="view is-active" data-view="counter" aria-labelledby="counter-title">
+      <header>
+        <div class="headline">
+          <span class="headline-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L4 7V17L12 21L20 17V7L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 9H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M9 12H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M9 15H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <div id="counter-title">
+            <small>Word Party</small>
+            文字カウント・ショータイム
+          </div>
         </div>
-      </div>
-      <p>美しい文章づくりをサポートする、ミニマルで軽快なカウンター。リアルタイムで文字数・行数・単語数をチェックできます。</p>
-    </header>
+        <p>文章づくりを盛り上げるステージへようこそ！リアルタイムで文字数・行数・単語数を測りながら、あなたのストーリーをノリノリに仕上げましょう。</p>
+      </header>
 
-    <section class="mascot" aria-live="polite">
-      <div class="mascot-figure">
-        <div class="mascot-face">
-          <img id="mascot-face" src="assets/reaction-waiting.svg" alt="わくわくして入力を待つ表情">
+      <section class="mascot" aria-live="polite">
+        <div class="mascot-figure">
+          <div class="mascot-face">
+            <img id="mascot-face" src="assets/reaction-waiting.svg" alt="わくわくして入力を待つ表情">
+          </div>
+          <div class="mascot-hand"></div>
         </div>
-        <div class="mascot-hand"></div>
+        <p class="mascot-message" id="mascot-message">ステージは整ったよ！どんな文章で盛り上げる？</p>
+      </section>
+
+      <textarea id="t" placeholder="ここに文章を投げ込んで、言葉のショーを始めよう！"></textarea>
+
+      <div class="stats" aria-live="polite">
+        <div class="box">
+          <span>Character</span>
+          <strong id="chars">0</strong>
+        </div>
+        <div class="box">
+          <span>Lines</span>
+          <strong id="lines">0</strong>
+        </div>
+        <div class="box">
+          <span>Words</span>
+          <strong id="words">0</strong>
+        </div>
       </div>
-      <p class="mascot-message" id="mascot-message">入力を待ってるよ〜！どんな文章が来るかな？</p>
+
+      <div class="actions">
+        <button id="clear" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M9 6V4H15V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M5 6L6 19C6.05535 19.5978 6.31954 20.1599 6.75041 20.58C7.18128 21.0002 7.75022 21.25 8.343 21.29H15.657C16.20498 21.25 16.8187 21.0002 17.2496 20.58C17.6805 20.1599 17.9447 19.5978 18 19L19 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          クリア
+        </button>
+      </div>
+
+      <footer>
+        <span class="badge">PWA Ready</span>
+        オフラインでも利用OK。ホーム画面に置けば、いつでもどこでも文字ライブを楽しめます。
+      </footer>
     </section>
 
-    <textarea id="t" placeholder="ここに文章を入力／貼り付け"></textarea>
+    <section class="view" data-view="game" aria-labelledby="game-title">
+      <header>
+        <div class="headline">
+          <span class="headline-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 18L10 16H14L16 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="10" r="1" fill="currentColor"/>
+              <circle cx="15" cy="10" r="1" fill="currentColor"/>
+            </svg>
+          </span>
+          <div id="game-title">
+            <small>Arcade Time</small>
+            ポップドロップ・パズル
+          </div>
+        </div>
+        <p>キラキラ降るブロックをさばいてハイスコアを狙う、ライトなテトリス風ミニゲーム。文章制作のクールダウンに、ちょっとしたエンタメタイムをどうぞ！</p>
+      </header>
 
-    <div class="stats" aria-live="polite">
-      <div class="box">
-        <span>Character</span>
-        <strong id="chars">0</strong>
+      <div class="game-layout">
+        <div class="game-canvas-wrap">
+          <canvas id="game-board" width="240" height="432" aria-describedby="game-banner"></canvas>
+        </div>
+        <div class="game-info">
+          <p class="game-banner" id="game-banner">ゲームスタートを押して、ブロックショーを開演しよう！</p>
+          <div class="game-scoreboard">
+            <div class="box">
+              <span>Score</span>
+              <strong id="game-score">0</strong>
+            </div>
+            <div class="box">
+              <span>Lines</span>
+              <strong id="game-lines">0</strong>
+            </div>
+            <div class="box">
+              <span>Level</span>
+              <strong id="game-level">1</strong>
+            </div>
+          </div>
+          <p class="game-instruction">矢印キーで移動＆回転（上キー）。スペースキーで一気にドロップ！音は出ないので静かな場所でも安心です。</p>
+          <button id="game-start" type="button">ゲームスタート／リスタート</button>
+        </div>
       </div>
-      <div class="box">
-        <span>Lines</span>
-        <strong id="lines">0</strong>
-      </div>
-      <div class="box">
-        <span>Words</span>
-        <strong id="words">0</strong>
-      </div>
-    </div>
+    </section>
+  </main>
 
-    <div class="actions">
-      <button id="clear" type="button">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M9 6V4H15V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M10 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M14 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M5 6L6 19C6.05535 19.5978 6.31954 20.1599 6.75041 20.58C7.18128 21.0002 7.75022 21.25 8.343 21.29H15.657C16.2498 21.25 16.8187 21.0002 17.2496 20.58C17.6805 20.1599 17.9447 19.5978 18 19L19 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        クリア
+  <nav class="global-nav" aria-label="メインメニュー">
+    <div class="global-nav-inner">
+      <button class="nav-button is-active" type="button" data-nav="counter" aria-pressed="true">
+        <div class="nav-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 7H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M6 12H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M9 17H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <strong>文字カウンター</strong>
+        <span>Count</span>
+      </button>
+      <button class="nav-button" type="button" data-nav="game" aria-pressed="false">
+        <div class="nav-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="7" height="7" rx="1.2" fill="currentColor"/>
+            <rect x="13" y="4" width="7" height="9" rx="1.2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="4" y="13" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="13" y="15" width="7" height="5" rx="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+        <strong>ゲーム</strong>
+        <span>Arcade</span>
       </button>
     </div>
-
-    <footer>
-      <span class="badge">PWA Ready</span>
-      オフラインでも利用可能。ホーム画面に追加するとアプリのように使えます。
-    </footer>
-  </main>
+  </nav>
 
   <script>
     const $ = s => document.querySelector(s);
@@ -417,33 +622,33 @@
     const defaultReaction = {
       src: 'assets/reaction-waiting.svg',
       alt: 'わくわくして入力を待つ表情',
-      message: '入力を待ってるよ〜！どんな文章が来るかな？'
+      message: 'ステージは整ったよ！どんな文章で盛り上げる？'
     };
     const reactions = [
       {
         src: 'assets/reaction-happy.svg',
         alt: '嬉しそうに微笑む表情',
-        message: 'いい感じ！そのペースで続けてね〜。'
+        message: 'リズム最高！そのままビート刻んで！'
       },
       {
         src: 'assets/reaction-energetic.svg',
         alt: '勢いづいてやる気に満ちた表情',
-        message: '勢いが出てきたよ！たくさん書いちゃおう♪'
+        message: '勢いが出てきたよ！このままクライマックスへ！'
       },
       {
         src: 'assets/reaction-surprised.svg',
         alt: '驚いて目を丸くする表情',
-        message: 'わぁ、素敵な言葉が並んでる…！'
+        message: 'わぁ、キラーワードの雨が降ってる〜！'
       },
       {
         src: 'assets/reaction-calm.svg',
         alt: '穏やかに見守る表情',
-        message: '落ち着いて整えていこっか。'
+        message: '深呼吸してステージを丁寧に整えよう。'
       },
       {
         src: 'assets/reaction-hopeful.svg',
         alt: '希望に満ちた微笑みの表情',
-        message: 'あとちょっとで完成の予感がするよ〜！'
+        message: 'あとちょっとでフィナーレの予感だよ〜！'
       }
     ];
     let previousReactionIndex = -1;
@@ -496,6 +701,407 @@
       playReaction(t.value);
     } else {
       setReaction(defaultReaction);
+    }
+
+    const views = document.querySelectorAll('[data-view]');
+    const navButtons = document.querySelectorAll('[data-nav]');
+    let currentView = 'counter';
+    const activeView = document.querySelector('[data-view].is-active');
+    if (activeView) {
+      currentView = activeView.dataset.view;
+    }
+    views.forEach(view => {
+      const isActive = view.dataset.view === currentView;
+      view.hidden = !isActive;
+      view.classList.toggle('is-active', isActive);
+    });
+    navButtons.forEach(btn => {
+      const isActive = btn.dataset.nav === currentView;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    const canvas = document.getElementById('game-board');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    const gameScoreEl = $('#game-score');
+    const gameLinesEl = $('#game-lines');
+    const gameLevelEl = $('#game-level');
+    const gameBanner = $('#game-banner');
+    const gameStartButton = $('#game-start');
+
+    const COLS = 10;
+    const ROWS = 18;
+    const BLOCK_SIZE = 24;
+    const COLORS = [null, '#7f7bff', '#ff5db2', '#ffb347', '#66f0c5', '#50c9ff', '#c7a2ff', '#ffe066'];
+    const arena = createMatrix(ROWS, COLS);
+    const player = { pos: { x: 0, y: 0 }, matrix: null, score: 0, lines: 0, level: 1 };
+    let dropInterval = 800;
+    let dropTimer = null;
+    let isGameRunning = false;
+    let isGameOver = false;
+    let hasGameStarted = false;
+
+    function setBanner(message) {
+      if (gameBanner) {
+        gameBanner.textContent = message;
+      }
+    }
+
+    function updateScoreboard() {
+      if (gameScoreEl) gameScoreEl.textContent = player.score;
+      if (gameLinesEl) gameLinesEl.textContent = player.lines;
+      if (gameLevelEl) gameLevelEl.textContent = player.level;
+    }
+
+    function createMatrix(rows, cols) {
+      return Array.from({ length: rows }, () => Array(cols).fill(0));
+    }
+
+    function createPiece(type) {
+      switch (type) {
+        case 'T':
+          return [
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 0, 0],
+          ];
+        case 'O':
+          return [
+            [2, 2],
+            [2, 2],
+          ];
+        case 'L':
+          return [
+            [0, 0, 3],
+            [3, 3, 3],
+            [0, 0, 0],
+          ];
+        case 'J':
+          return [
+            [4, 0, 0],
+            [4, 4, 4],
+            [0, 0, 0],
+          ];
+        case 'S':
+          return [
+            [0, 5, 5],
+            [5, 5, 0],
+            [0, 0, 0],
+          ];
+        case 'Z':
+          return [
+            [6, 6, 0],
+            [0, 6, 6],
+            [0, 0, 0],
+          ];
+        case 'I':
+          return [
+            [0, 0, 0, 0],
+            [7, 7, 7, 7],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+          ];
+        default:
+          return [[1]];
+      }
+    }
+
+    function drawMatrix(matrix, offset) {
+      if (!ctx) return;
+      matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value !== 0) {
+            ctx.fillStyle = COLORS[value] || '#ffffff';
+            ctx.fillRect((x + offset.x) * BLOCK_SIZE, (y + offset.y) * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+          }
+        });
+      });
+    }
+
+    function draw() {
+      if (!ctx || !canvas) return;
+      ctx.fillStyle = 'rgba(8, 9, 30, 1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      drawMatrix(arena, { x: 0, y: 0 });
+      if (player.matrix) {
+        drawMatrix(player.matrix, player.pos);
+      }
+    }
+
+    function merge(arena, player) {
+      player.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value !== 0) {
+            arena[y + player.pos.y][x + player.pos.x] = value;
+          }
+        });
+      });
+    }
+
+    function collide(arena, player) {
+      for (let y = 0; y < player.matrix.length; y++) {
+        for (let x = 0; x < player.matrix[y].length; x++) {
+          if (player.matrix[y][x] !== 0) {
+            const row = arena[y + player.pos.y];
+            if (!row || row[x + player.pos.x] !== 0) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function rotate(matrix, dir) {
+      for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < y; x++) {
+          [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+        }
+      }
+      if (dir > 0) {
+        matrix.forEach(row => row.reverse());
+      } else {
+        matrix.reverse();
+      }
+    }
+
+    function arenaSweep() {
+      let rowCount = 0;
+      for (let y = arena.length - 1; y >= 0; y--) {
+        if (arena[y].every(value => value !== 0)) {
+          arena.splice(y, 1);
+          arena.unshift(new Array(COLS).fill(0));
+          rowCount++;
+          y++;
+        }
+      }
+      if (rowCount > 0) {
+        player.score += rowCount * rowCount * 120 * player.level;
+        player.lines += rowCount;
+        if (rowCount >= 4) {
+          setBanner('テトリス成功！会場がどよめいてるよ！');
+        } else if (rowCount > 1) {
+          setBanner(`${rowCount}ラインコンボ！リズムに乗ってる！`);
+        } else {
+          setBanner('1ラインクリア！いい流れだね！');
+        }
+        if (player.lines >= player.level * 8) {
+          player.level++;
+          dropInterval = Math.max(150, dropInterval - 70);
+          if (isGameRunning && !isGameOver) {
+            restartDropTimer();
+            setBanner(`レベル${player.level}にアップ！スピード注意！`);
+          }
+        }
+        updateScoreboard();
+      }
+    }
+
+    function restartDropTimer() {
+      stopDropTimer();
+      if (isGameRunning && !isGameOver) {
+        dropTimer = setInterval(playerDrop, dropInterval);
+      }
+    }
+
+    function stopDropTimer() {
+      if (dropTimer) {
+        clearInterval(dropTimer);
+        dropTimer = null;
+      }
+    }
+
+    function playerReset() {
+      if (!canvas || !ctx) return;
+      const pieces = 'TJLOSZI';
+      const type = pieces[Math.floor(Math.random() * pieces.length)];
+      player.matrix = createPiece(type);
+      player.pos.y = 0;
+      player.pos.x = Math.floor((COLS - player.matrix[0].length) / 2);
+      if (collide(arena, player)) {
+        isGameOver = true;
+        isGameRunning = false;
+        setBanner('ゲームオーバー！ゲームスタートで再挑戦してね。');
+        stopDropTimer();
+        player.matrix = null;
+      }
+    }
+
+    function playerDrop() {
+      if (!isGameRunning || isGameOver) return;
+      player.pos.y++;
+      if (collide(arena, player)) {
+        player.pos.y--;
+        merge(arena, player);
+        arenaSweep();
+        playerReset();
+      }
+      draw();
+    }
+
+    function hardDrop() {
+      if (!isGameRunning || isGameOver) return;
+      while (!collide(arena, player)) {
+        player.pos.y++;
+      }
+      player.pos.y--;
+      merge(arena, player);
+      arenaSweep();
+      playerReset();
+      draw();
+      if (!isGameOver) {
+        restartDropTimer();
+      }
+    }
+
+    function playerMove(dir) {
+      if (!isGameRunning || isGameOver) return;
+      player.pos.x += dir;
+      if (collide(arena, player)) {
+        player.pos.x -= dir;
+      } else {
+        draw();
+      }
+    }
+
+    function playerRotate(dir) {
+      if (!isGameRunning || isGameOver) return;
+      const pos = player.pos.x;
+      let offset = 1;
+      rotate(player.matrix, dir);
+      while (collide(arena, player)) {
+        player.pos.x += offset;
+        offset = -(offset + (offset > 0 ? 1 : -1));
+        if (offset > player.matrix[0].length) {
+          rotate(player.matrix, -dir);
+          player.pos.x = pos;
+          return;
+        }
+      }
+      draw();
+    }
+
+    function startGame() {
+      if (!canvas || !ctx) return;
+      stopDropTimer();
+      arena.forEach(row => row.fill(0));
+      player.score = 0;
+      player.lines = 0;
+      player.level = 1;
+      dropInterval = 800;
+      isGameOver = false;
+      isGameRunning = true;
+      hasGameStarted = true;
+      player.matrix = null;
+      updateScoreboard();
+      setBanner('ブロックショー開演！矢印キーで操作してね。');
+      playerReset();
+      if (!isGameOver) {
+        draw();
+        restartDropTimer();
+      } else {
+        draw();
+      }
+    }
+
+    function pauseGame() {
+      if (!hasGameStarted || isGameOver) {
+        isGameRunning = false;
+        stopDropTimer();
+        return;
+      }
+      if (!isGameRunning) return;
+      isGameRunning = false;
+      stopDropTimer();
+      setBanner('ポーズ中。ゲームメニューで再開しよう！');
+    }
+
+    function resumeGame() {
+      if (!hasGameStarted || isGameOver) return;
+      if (isGameRunning) return;
+      isGameRunning = true;
+      setBanner('再開！ブロックの雨をさばいてね！');
+      restartDropTimer();
+    }
+
+    function handleGameKey(event) {
+      if (currentView !== 'game' || !hasGameStarted || isGameOver) return;
+      if (!isGameRunning) return;
+      const key = event.key;
+      if (key === 'ArrowLeft') {
+        event.preventDefault();
+        playerMove(-1);
+      } else if (key === 'ArrowRight') {
+        event.preventDefault();
+        playerMove(1);
+      } else if (key === 'ArrowDown') {
+        event.preventDefault();
+        playerDrop();
+      } else if (key === 'ArrowUp') {
+        event.preventDefault();
+        playerRotate(1);
+      } else if (key === ' ' || key === 'Spacebar') {
+        event.preventDefault();
+        hardDrop();
+      }
+    }
+
+    function switchView(target) {
+      if (!target) return;
+      if (target === currentView) {
+        if (target === 'game' && hasGameStarted && !isGameOver) {
+          resumeGame();
+        }
+        return;
+      }
+      currentView = target;
+      views.forEach(view => {
+        const isActive = view.dataset.view === target;
+        view.classList.toggle('is-active', isActive);
+        view.hidden = !isActive;
+      });
+      navButtons.forEach(btn => {
+        const isActive = btn.dataset.nav === target;
+        btn.classList.toggle('is-active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+      if (target === 'game') {
+        if (!hasGameStarted) {
+          startGame();
+        } else if (!isGameOver) {
+          resumeGame();
+        } else {
+          setBanner('ゲームオーバー！ゲームスタートで再挑戦してね。');
+        }
+      } else {
+        pauseGame();
+      }
+    }
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.nav));
+    });
+    if (gameStartButton) {
+      gameStartButton.addEventListener('click', () => {
+        startGame();
+        if (currentView !== 'game') {
+          switchView('game');
+        }
+      });
+    }
+    document.addEventListener('keydown', handleGameKey);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && currentView === 'game') {
+        pauseGame();
+      } else if (!document.hidden && currentView === 'game' && hasGameStarted && !isGameOver) {
+        resumeGame();
+      }
+    });
+
+    updateScoreboard();
+    if (ctx && canvas) {
+      ctx.imageSmoothingEnabled = false;
+      draw();
     }
 
     // サービスワーカー登録（PWAのオフライン化）
