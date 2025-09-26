@@ -38,6 +38,43 @@
       align-items: center;
       justify-content: center;
       padding: clamp(24px, 5vw, 48px);
+      position: relative;
+      overflow: hidden;
+    }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -30%;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.8), transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(255, 184, 255, 0.7), transparent 60%),
+        radial-gradient(circle at 40% 80%, rgba(165, 194, 255, 0.7), transparent 60%);
+      filter: blur(60px);
+      opacity: 0.65;
+      animation: aurora-flow 36s linear infinite;
+      transform-origin: center;
+    }
+    body::after {
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.75), transparent 55%),
+        radial-gradient(circle at 70% 60%, rgba(255, 240, 200, 0.6), transparent 60%),
+        radial-gradient(circle at 60% 20%, rgba(180, 255, 236, 0.5), transparent 65%);
+      filter: blur(80px);
+      opacity: 0.55;
+      animation-duration: 48s;
+      animation-direction: reverse;
+    }
+    @keyframes aurora-flow {
+      0% {
+        transform: translate3d(-4%, -4%, 0) rotate(0deg) scale(1.05);
+      }
+      50% {
+        transform: translate3d(4%, 3%, 0) rotate(180deg) scale(1.1);
+      }
+      100% {
+        transform: translate3d(-4%, -4%, 0) rotate(360deg) scale(1.05);
+      }
     }
     .wrap {
       width: min(960px, 100%);
@@ -120,9 +157,18 @@
       box-shadow: 0 18px 24px rgba(59, 63, 204, 0.18);
     }
     .mascot-face {
-      font-size: clamp(1.4rem, 4.5vw, 1.8rem);
-      color: var(--accent);
+      width: 78%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: transform 0.3s ease;
+    }
+    .mascot-face img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
     }
     .mascot-hand {
       position: absolute;
@@ -317,11 +363,13 @@
     </header>
 
     <section class="mascot" aria-live="polite">
-      <div class="mascot-figure" aria-hidden="true">
-        <div class="mascot-face" id="mascot-face">(o´∀`o)</div>
+      <div class="mascot-figure">
+        <div class="mascot-face">
+          <img id="mascot-face" src="assets/reaction-waiting.svg" alt="わくわくして入力を待つ表情">
+        </div>
         <div class="mascot-hand"></div>
       </div>
-      <p class="mascot-message" id="mascot-message">こんにちは！今日も楽しくカウントしましょう♪</p>
+      <p class="mascot-message" id="mascot-message">入力を待ってるよ〜！どんな文章が来るかな？</p>
     </section>
 
     <textarea id="t" placeholder="ここに文章を入力／貼り付け"></textarea>
@@ -366,20 +414,51 @@
     const mascot = $('.mascot');
     const mascotFace = $('#mascot-face');
     const mascotMessage = $('#mascot-message');
+    const defaultReaction = {
+      src: 'assets/reaction-waiting.svg',
+      alt: 'わくわくして入力を待つ表情',
+      message: '入力を待ってるよ〜！どんな文章が来るかな？'
+    };
     const reactions = [
-      { face: '(o´∀`o)', message: 'いい感じ！そのペースで続けてね〜。' },
-      { face: '(๑•̀ㅂ•́)و✧', message: '勢いが出てきたよ！たくさん書いちゃおう♪' },
-      { face: '(〃ﾟ3ﾟ〃)', message: 'わぁ、素敵な言葉が並んでる…！' },
-      { face: '( ˘ω˘ )', message: '落ち着いて整えていこっか。' },
-      { face: '(*´꒳`*)', message: 'あとちょっとで完成の予感がするよ〜！' }
+      {
+        src: 'assets/reaction-happy.svg',
+        alt: '嬉しそうに微笑む表情',
+        message: 'いい感じ！そのペースで続けてね〜。'
+      },
+      {
+        src: 'assets/reaction-energetic.svg',
+        alt: '勢いづいてやる気に満ちた表情',
+        message: '勢いが出てきたよ！たくさん書いちゃおう♪'
+      },
+      {
+        src: 'assets/reaction-surprised.svg',
+        alt: '驚いて目を丸くする表情',
+        message: 'わぁ、素敵な言葉が並んでる…！'
+      },
+      {
+        src: 'assets/reaction-calm.svg',
+        alt: '穏やかに見守る表情',
+        message: '落ち着いて整えていこっか。'
+      },
+      {
+        src: 'assets/reaction-hopeful.svg',
+        alt: '希望に満ちた微笑みの表情',
+        message: 'あとちょっとで完成の予感がするよ〜！'
+      }
     ];
     let previousReactionIndex = -1;
+
+    function setReaction(reaction) {
+      if (!mascotFace || !mascotMessage) return;
+      mascotFace.setAttribute('src', reaction.src);
+      mascotFace.setAttribute('alt', reaction.alt);
+      mascotMessage.textContent = reaction.message;
+    }
 
     function playReaction(text){
       if (!mascot || !mascotFace || !mascotMessage) return;
       if (!text.trim()) {
-        mascotFace.textContent = '(・∀・)ﾉ';
-        mascotMessage.textContent = '入力を待ってるよ〜！どんな文章が来るかな？';
+        setReaction(defaultReaction);
       } else {
         let nextIndex = Math.floor(Math.random() * reactions.length);
         if (reactions.length > 1) {
@@ -389,8 +468,7 @@
         }
         previousReactionIndex = nextIndex;
         const reaction = reactions[nextIndex];
-        mascotFace.textContent = reaction.face;
-        mascotMessage.textContent = reaction.message;
+        setReaction(reaction);
       }
       mascot.classList.remove('is-animate');
       void mascot.offsetWidth; // reflow to restart animation
@@ -416,6 +494,8 @@
     update();
     if (t.value) {
       playReaction(t.value);
+    } else {
+      setReaction(defaultReaction);
     }
 
     // サービスワーカー登録（PWAのオフライン化）
