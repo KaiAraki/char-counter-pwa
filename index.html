@@ -415,6 +415,7 @@
     #game-board {
       width: 100%;
       height: auto;
+      aspect-ratio: 10 / 18;
       display: block;
       background: rgba(8, 9, 30, 0.92);
       border-radius: 12px;
@@ -1141,22 +1142,33 @@
     function resizeWebGLCanvas(glContext, canvasElement) {
       if (!canvasElement) return false;
       const dpr = window.devicePixelRatio || 1;
-      const clientWidth = Math.round(canvasElement.clientWidth);
+      const rect = canvasElement.getBoundingClientRect();
+      let clientWidth = rect.width || canvasElement.clientWidth;
       if (!clientWidth) {
-        return false;
+        clientWidth = DEFAULT_CANVAS_WIDTH;
       }
-      let clientHeight = canvasElement.clientHeight;
-      if (!clientHeight) {
+      let clientHeight = rect.height || canvasElement.clientHeight;
+      if (!clientHeight || !isFinite(clientHeight)) {
         const aspectRatio = canvasElement.height && canvasElement.width
           ? canvasElement.height / canvasElement.width
           : DEFAULT_CANVAS_ASPECT;
         clientHeight = clientWidth * aspectRatio;
       }
-      if (!clientHeight || !isFinite(clientHeight)) {
+      if (!clientWidth || !clientHeight || !isFinite(clientHeight)) {
         return false;
       }
-      const displayWidth = Math.max(1, Math.round(clientWidth * dpr));
-      const displayHeight = Math.max(1, Math.round(clientHeight * dpr));
+      const roundedCssWidth = Math.max(1, Math.round(clientWidth));
+      const roundedCssHeight = Math.max(1, Math.round(clientHeight));
+      const currentCssWidth = parseInt(canvasElement.style.width, 10);
+      const currentCssHeight = parseInt(canvasElement.style.height, 10);
+      if (currentCssWidth !== roundedCssWidth) {
+        canvasElement.style.width = `${roundedCssWidth}px`;
+      }
+      if (currentCssHeight !== roundedCssHeight) {
+        canvasElement.style.height = `${roundedCssHeight}px`;
+      }
+      const displayWidth = Math.max(1, Math.round(roundedCssWidth * dpr));
+      const displayHeight = Math.max(1, Math.round(roundedCssHeight * dpr));
       if (canvasElement.width !== displayWidth || canvasElement.height !== displayHeight) {
         canvasElement.width = displayWidth;
         canvasElement.height = displayHeight;
