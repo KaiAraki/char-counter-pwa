@@ -37,8 +37,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: clamp(24px, 5vw, 48px);
+      padding-top: clamp(40px, 8vh, 72px);
       padding-bottom: clamp(120px, 22vh, 160px);
       position: relative;
       overflow-x: hidden;
@@ -399,6 +400,7 @@
       display: grid;
       gap: clamp(20px, 3.6vw, 32px);
       align-items: start;
+      margin-bottom: clamp(96px, 20vh, 160px);
     }
     .game-canvas-wrap {
       position: relative;
@@ -1726,13 +1728,26 @@
     function arenaSweep() {
       let rowCount = 0;
       for (let y = arena.length - 1; y >= 0; y--) {
-        if (arena[y].every(value => value !== 0)) {
-          addClearEffect(y);
-          arena.splice(y, 1);
-          arena.unshift(new Array(COLS).fill(0));
-          rowCount++;
-          y++;
+        const row = arena[y];
+        if (!Array.isArray(row) || row.length !== COLS) {
+          continue;
         }
+        let isFull = true;
+        for (let x = 0; x < COLS; x++) {
+          const cell = row[x];
+          if (!Number.isFinite(cell) || cell <= 0) {
+            isFull = false;
+            break;
+          }
+        }
+        if (!isFull) {
+          continue;
+        }
+        addClearEffect(y);
+        arena.splice(y, 1);
+        arena.unshift(new Array(COLS).fill(0));
+        rowCount++;
+        y++;
       }
       if (rowCount > 0) {
         player.score += rowCount * rowCount * 120 * player.level;
