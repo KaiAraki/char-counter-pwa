@@ -1,0 +1,43 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cat-bg" x1="30" y1="20" x2="190" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE7FB"/>
+      <stop offset="1" stop-color="#D9E4FF"/>
+    </linearGradient>
+    <linearGradient id="cat-body" x1="64" y1="70" x2="156" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF9FF"/>
+      <stop offset="1" stop-color="#F0F4FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="12" y="16" width="196" height="196" rx="48" fill="url(#cat-bg)"/>
+  <g filter="url(#cat-shadow)">
+    <path d="M72 66L94 44C98 39 106 39 110 44L118 54L126 44C130 39 138 39 142 44L164 66V154C164 172 150 186 132 186H104C86 186 72 172 72 154V66Z" fill="url(#cat-body)"/>
+  </g>
+  <path d="M82 104C82 92 92 82 104 82H134C146 82 156 92 156 104V128C156 144 144 158 128 160L120 161H118L110 160C94 158 82 144 82 128V104Z" fill="#FFFFFF" opacity="0.8"/>
+  <path d="M104 142C104 147.523 99.5228 152 94 152C88.4772 152 84 147.523 84 142" stroke="#FF8BC4" stroke-width="6" stroke-linecap="round"/>
+  <path d="M136 142C136 147.523 131.523 152 126 152C120.477 152 116 147.523 116 142" stroke="#FF8BC4" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="102" cy="116" r="10" fill="#2F1D4A"/>
+  <circle cx="136" cy="116" r="10" fill="#2F1D4A"/>
+  <circle cx="140" cy="112" r="3" fill="white"/>
+  <circle cx="106" cy="112" r="3" fill="white"/>
+  <path d="M120 130C120 135.523 115.523 140 110 140C104.477 140 100 135.523 100 130" stroke="#FFAF3A" stroke-width="6" stroke-linecap="round"/>
+  <path d="M118 166C118 172.627 112.627 178 106 178C99.3726 178 94 172.627 94 166" stroke="#6D8BFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M146 166C146 172.627 140.627 178 134 178C127.373 178 122 172.627 122 166" stroke="#6D8BFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M110 124L116 130L110 136" stroke="#FF8BC4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M126 124L120 130L126 136" stroke="#FF8BC4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M80 84C80 80 84 76 90 76" stroke="#FFB4D8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M160 84C160 80 156 76 150 76" stroke="#FFB4D8" stroke-width="6" stroke-linecap="round"/>
+  <g opacity="0.28">
+    <circle cx="60" cy="72" r="8" fill="#FFE4F6"/>
+    <circle cx="44" cy="148" r="10" fill="#FFDFF1"/>
+    <circle cx="176" cy="64" r="9" fill="#F3F7FF"/>
+    <circle cx="168" cy="180" r="11" fill="#FFE7F4"/>
+  </g>
+  <defs>
+    <filter id="cat-shadow" x="52" y="32" width="132" height="174" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>

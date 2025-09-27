@@ -1,0 +1,47 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dog-bg" x1="24" y1="28" x2="200" y2="194" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF4DE"/>
+      <stop offset="1" stop-color="#FFE3F4"/>
+    </linearGradient>
+    <linearGradient id="dog-body" x1="70" y1="64" x2="150" y2="184" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF8EC"/>
+      <stop offset="1" stop-color="#FFE9D1"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="14" width="200" height="200" rx="48" fill="url(#dog-bg)"/>
+  <g filter="url(#dog-shadow)">
+    <path d="M62 84C62 66 76 52 94 52H126C144 52 158 66 158 84V150C158 170 142 186 122 186H98C78 186 62 170 62 150V84Z" fill="url(#dog-body)"/>
+  </g>
+  <path d="M84 66L72 54C68 50 60 52 58 58L50 86C47 96 54 106 64 108" stroke="#FFB85E" stroke-width="10" stroke-linecap="round"/>
+  <path d="M136 66L148 54C152 50 160 52 162 58L170 86C173 96 166 106 156 108" stroke="#FFB85E" stroke-width="10" stroke-linecap="round"/>
+  <path d="M86 132C86 122 94 114 104 114H120C130 114 138 122 138 132V142C138 152 130 160 120 160H104C94 160 86 152 86 142V132Z" fill="#FFFFFF" opacity="0.85"/>
+  <circle cx="100" cy="110" r="11" fill="#2E1C3F"/>
+  <circle cx="132" cy="110" r="11" fill="#2E1C3F"/>
+  <circle cx="104" cy="106" r="3" fill="white"/>
+  <circle cx="136" cy="106" r="3" fill="white"/>
+  <path d="M116 130C116 135.523 111.523 140 106 140C100.477 140 96 135.523 96 130" stroke="#FF6AA2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M122 166C122 172.627 116.627 178 110 178C103.373 178 98 172.627 98 166" stroke="#FF8BC4" stroke-width="6" stroke-linecap="round"/>
+  <path d="M142 166C142 172.627 136.627 178 130 178C123.373 178 118 172.627 118 166" stroke="#FF8BC4" stroke-width="6" stroke-linecap="round"/>
+  <path d="M90 150C90 156.627 84.6274 162 78 162C71.3726 162 66 156.627 66 150" stroke="#6D8BFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M158 150C158 156.627 152.627 162 146 162C139.373 162 134 156.627 134 150" stroke="#6D8BFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M110 122L116 128L110 134" stroke="#FF6AA2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M124 122L118 128L124 134" stroke="#FF6AA2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="84" cy="128" r="10" fill="#FFE6F5"/>
+  <circle cx="148" cy="128" r="10" fill="#FFE6F5"/>
+  <path d="M92 182C92 188.627 86.6274 194 80 194C73.3726 194 68 188.627 68 182" stroke="#FFAF3A" stroke-width="6" stroke-linecap="round"/>
+  <path d="M152 182C152 188.627 146.627 194 140 194C133.373 194 128 188.627 128 182" stroke="#FFAF3A" stroke-width="6" stroke-linecap="round"/>
+  <g opacity="0.25">
+    <circle cx="180" cy="60" r="12" fill="#FFECD9"/>
+    <circle cx="42" cy="68" r="9" fill="#FFF2E4"/>
+    <circle cx="48" cy="184" r="12" fill="#FFE6F4"/>
+    <circle cx="174" cy="176" r="10" fill="#FFE9F6"/>
+  </g>
+  <defs>
+    <filter id="dog-shadow" x="42" y="42" width="136" height="164" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>
