@@ -929,33 +929,150 @@
     }
     @media (max-width: 640px) {
       body {
-        padding: clamp(18px, 8vw, 32px);
-        padding-bottom: clamp(64px, 24vw, 120px);
+        padding: clamp(16px, 6vw, 28px);
+        padding-bottom: clamp(56px, 20vw, 96px);
         align-items: stretch;
         justify-content: flex-start;
       }
       .site-header {
-        margin-bottom: clamp(22px, 6vw, 32px);
-        padding: clamp(14px, 5vw, 20px) clamp(16px, 5vw, 22px);
+        margin-bottom: clamp(20px, 6vw, 30px);
+        padding: clamp(12px, 5vw, 18px) clamp(14px, 5vw, 20px);
+        border-radius: calc(var(--radius-md) - 4px);
+      }
+      .brand-emblem {
+        width: 38px;
+        height: 38px;
+        font-size: 0.84rem;
+      }
+      .brand-text strong {
+        font-size: 1rem;
+      }
+      .brand-text span {
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+      }
+      .menu-toggle {
+        width: 40px;
+        height: 40px;
+      }
+      .site-menu {
+        gap: 18px;
+      }
+      .nav-button {
+        padding: 11px 14px;
+      }
+      .nav-button strong {
+        font-size: 0.92rem;
+      }
+      .nav-button span {
+        font-size: 0.68rem;
+      }
+      .summary-title {
+        font-size: 0.72rem;
+      }
+      .summary-count strong {
+        font-size: 1.02rem;
+      }
+      .quick-stats-grid {
+        gap: 8px;
+      }
+      .quick-stat {
+        padding: 10px 12px;
+      }
+      .quick-stat span {
+        font-size: 0.62rem;
+      }
+      .quick-stat strong {
+        font-size: 0.98rem;
       }
       .wrap {
-        padding: clamp(18px, 6vw, 32px);
+        padding: clamp(16px, 5.4vw, 26px);
+        border-radius: calc(var(--radius-lg) - 6px);
       }
       .hero-characters {
         display: none;
       }
-      .nav-button {
-        padding: 12px 14px;
+      header {
+        gap: 14px;
+        margin-bottom: clamp(20px, 5vw, 32px);
+      }
+      .headline {
+        font-size: clamp(1.12rem, 5vw, 1.3rem);
+        gap: 14px;
+      }
+      .headline-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 16px;
+      }
+      .section-description {
+        font-size: 0.9rem;
+      }
+      .info-badges {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+      }
+      .info-badges li {
+        padding: 12px;
+      }
+      .mascot {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+      .mascot-figure {
+        width: 68px;
+        height: 68px;
+      }
+      .mascot-message {
+        font-size: 0.92rem;
+      }
+      textarea {
+        min-height: 220px;
+        padding: 16px;
+        font-size: 0.98rem;
+      }
+      .stats {
+        gap: 14px;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .box {
+        padding: 14px;
+      }
+      .box strong {
+        font-size: 1.34rem;
       }
       .actions {
+        flex-direction: column;
+        align-items: stretch;
         justify-content: stretch;
+        gap: 10px;
       }
       button {
         width: 100%;
         justify-content: center;
+        padding: 12px 18px;
       }
-      .info-badges {
+      .game-layout {
+        gap: 18px;
+        margin-bottom: clamp(60px, 18vh, 96px);
+      }
+      .game-canvas-wrap {
+        padding: 16px;
+        border-radius: calc(var(--radius-md) - 4px);
+      }
+      #game-board {
+        border-radius: 14px;
+      }
+      .game-banner {
+        padding: 14px 16px;
+        font-size: 0.92rem;
+      }
+      .game-scoreboard {
         grid-template-columns: minmax(0, 1fr);
+      }
+      .game-instruction {
+        font-size: 0.88rem;
       }
       .game-touch-grid {
         gap: 6px;
@@ -973,6 +1090,7 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+        font-size: 0.82rem;
       }
     }
     @media (max-width: 480px) {
