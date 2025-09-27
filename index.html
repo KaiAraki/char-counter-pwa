@@ -406,7 +406,6 @@
       position: relative;
       border-radius: var(--radius-md);
       padding: clamp(18px, 3vw, 26px);
-      padding-bottom: clamp(64px, 14vw, 128px);
       background: rgba(17, 22, 58, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       box-shadow: 0 25px 45px rgba(26, 22, 66, 0.28);
@@ -507,18 +506,6 @@
       .game-touch-controls {
         display: block;
       }
-      .global-nav {
-        position: static;
-        left: auto;
-        bottom: auto;
-        transform: none;
-        width: 100%;
-        max-width: none;
-        margin: clamp(28px, 9vw, 48px) 0 0;
-      }
-      .global-nav-inner {
-        border-radius: clamp(24px, 8vw, 40px);
-      }
     }
     @media (max-width: 640px) {
       body {
@@ -529,9 +516,6 @@
       }
       .wrap {
         padding: clamp(18px, 6vw, 32px);
-      }
-      .game-canvas-wrap {
-        padding-bottom: clamp(96px, 28vw, 168px);
       }
       .actions {
         justify-content: stretch;
