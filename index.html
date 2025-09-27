@@ -12,17 +12,25 @@
   <style>
     :root {
       color-scheme: light;
-      --bg-gradient: linear-gradient(135deg, #b1c8ff 0%, #f7d4f5 48%, #fff5c2 100%);
-      --surface: rgba(255, 255, 255, 0.78);
-      --surface-strong: rgba(255, 255, 255, 0.92);
-      --border: rgba(255, 255, 255, 0.45);
-      --text-main: #2c2c30;
-      --text-sub: #4f4f57;
-      --accent: #5b63ff;
-      --accent-dark: #3c3fca;
-      --shadow: 0 25px 45px rgba(38, 45, 74, 0.15);
-      --radius-lg: 26px;
+      --bg-gradient: radial-gradient(circle at 10% 20%, #f1f4ff 0%, rgba(244, 243, 255, 0.4) 45%),
+        radial-gradient(circle at 80% 15%, rgba(255, 215, 227, 0.65) 0%, rgba(255, 215, 227, 0) 52%),
+        linear-gradient(160deg, #eef3ff 0%, #f9f3ff 52%, #fff8f0 100%);
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --border: rgba(162, 170, 207, 0.26);
+      --outline: rgba(116, 128, 182, 0.4);
+      --text-main: #1f2341;
+      --text-sub: #4b4f6a;
+      --text-muted: #6d7191;
+      --accent: #5567ff;
+      --accent-dark: #2f3fb3;
+      --accent-soft: rgba(85, 103, 255, 0.12);
+      --shadow: 0 28px 48px rgba(33, 41, 88, 0.18);
+      --shadow-soft: 0 16px 32px rgba(39, 46, 92, 0.12);
+      --radius-lg: 28px;
       --radius-md: 18px;
+      --radius-sm: 14px;
+      --transition: 200ms cubic-bezier(0.33, 1, 0.68, 1);
     }
     * {
       box-sizing: border-box;
@@ -38,9 +46,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: clamp(24px, 5vw, 48px);
-      padding-top: clamp(40px, 8vh, 72px);
-      padding-bottom: clamp(120px, 22vh, 160px);
+      padding: clamp(28px, 5vw, 52px);
+      padding-top: clamp(48px, 8vh, 80px);
+      padding-bottom: clamp(136px, 22vh, 180px);
       position: relative;
       overflow-x: hidden;
       overflow-y: auto;
@@ -49,23 +57,23 @@
     body::after {
       content: "";
       position: fixed;
-      inset: -30%;
+      inset: -20%;
       z-index: -1;
       pointer-events: none;
-      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.8), transparent 55%),
-        radial-gradient(circle at 80% 30%, rgba(255, 184, 255, 0.7), transparent 60%),
-        radial-gradient(circle at 40% 80%, rgba(165, 194, 255, 0.7), transparent 60%);
-      filter: blur(60px);
-      opacity: 0.65;
+      background: radial-gradient(circle at 25% 35%, rgba(255, 255, 255, 0.85), transparent 60%),
+        radial-gradient(circle at 80% 30%, rgba(190, 210, 255, 0.68), transparent 65%),
+        radial-gradient(circle at 40% 80%, rgba(255, 198, 223, 0.6), transparent 70%);
+      filter: blur(70px);
+      opacity: 0.55;
       animation: aurora-flow 36s linear infinite;
       transform-origin: center;
     }
     body::after {
-      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.75), transparent 55%),
-        radial-gradient(circle at 70% 60%, rgba(255, 240, 200, 0.6), transparent 60%),
-        radial-gradient(circle at 60% 20%, rgba(180, 255, 236, 0.5), transparent 65%);
-      filter: blur(80px);
-      opacity: 0.55;
+      background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.7), transparent 62%),
+        radial-gradient(circle at 70% 60%, rgba(225, 229, 255, 0.7), transparent 60%),
+        radial-gradient(circle at 60% 20%, rgba(210, 255, 245, 0.55), transparent 70%);
+      filter: blur(90px);
+      opacity: 0.45;
       animation-duration: 48s;
       animation-direction: reverse;
     }
@@ -81,17 +89,26 @@
       }
     }
     .wrap {
-      width: min(960px, 100%);
+      width: min(1024px, 100%);
       background: var(--surface);
       border-radius: var(--radius-lg);
-      padding: clamp(24px, 4vw, 48px);
+      padding: clamp(28px, 4vw, 52px);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border);
       position: relative;
       overflow: hidden;
       isolation: isolate;
+    }
+    .wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.25) 55%);
+      opacity: 0.75;
+      pointer-events: none;
+      z-index: -1;
     }
     [data-view] {
       display: none;
@@ -102,49 +119,80 @@
     header {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: clamp(20px, 4vw, 36px);
+      gap: clamp(12px, 2vw, 18px);
+      margin-bottom: clamp(24px, 4vw, 42px);
     }
     .headline {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      gap: clamp(12px, 2vw, 18px);
+      font-size: clamp(1.24rem, 4vw, 1.92rem);
       font-weight: 700;
       letter-spacing: 0.05em;
     }
     .headline-icon {
-      width: clamp(38px, 6vw, 52px);
-      height: clamp(38px, 6vw, 52px);
+      width: clamp(44px, 6vw, 58px);
+      height: clamp(44px, 6vw, 58px);
       display: grid;
       place-items: center;
-      border-radius: 16px;
-      background: var(--surface-strong);
-      box-shadow: 0 12px 25px rgba(91, 99, 255, 0.15);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(223, 229, 255, 0.7));
+      box-shadow: 0 14px 32px rgba(85, 103, 255, 0.22);
       color: var(--accent);
     }
     .headline small {
       display: block;
       font-size: clamp(0.65rem, 2.1vw, 0.78rem);
-      letter-spacing: 0.3em;
+      letter-spacing: 0.42em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--text-muted);
     }
-    header p {
+    .section-description {
       margin: 0;
       color: var(--text-sub);
-      font-size: clamp(0.92rem, 2.6vw, 1.05rem);
+      font-size: clamp(0.94rem, 2.5vw, 1.08rem);
+      max-width: 640px;
+    }
+    .info-badges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(12px, 2.4vw, 18px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .info-badges li {
+      padding: clamp(12px, 2.2vw, 16px);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(169, 179, 217, 0.35);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .info-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+    }
+    .info-sub {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.5;
     }
     .mascot {
       display: flex;
       align-items: center;
       gap: clamp(16px, 4vw, 28px);
       padding: clamp(16px, 3vw, 24px);
-      margin-bottom: clamp(18px, 3.4vw, 30px);
-      background: rgba(255, 255, 255, 0.88);
+      margin-bottom: clamp(24px, 3.4vw, 34px);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(225, 233, 255, 0.75));
       border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(178, 187, 232, 0.35);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
       position: relative;
       overflow: hidden;
     }
@@ -162,9 +210,9 @@
       width: clamp(70px, 14vw, 90px);
       height: clamp(70px, 14vw, 90px);
       border-radius: 24px;
-      background: linear-gradient(135deg, #fff 0%, #f0f3ff 100%);
-      border: 1px solid rgba(91, 99, 255, 0.25);
-      box-shadow: 0 18px 24px rgba(59, 63, 204, 0.18);
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(229, 234, 255, 0.8) 100%);
+      border: 1px solid rgba(85, 103, 255, 0.28);
+      box-shadow: 0 18px 30px rgba(59, 63, 204, 0.18);
     }
     .mascot-face {
       width: 78%;
@@ -195,8 +243,8 @@
       flex: 1;
       margin: 0;
       color: var(--text-sub);
-      font-size: clamp(0.95rem, 3vw, 1.05rem);
-      line-height: 1.6;
+      font-size: clamp(0.96rem, 2.8vw, 1.08rem);
+      line-height: 1.65;
     }
     .mascot.is-animate .mascot-face {
       animation: mascot-bounce 0.7s ease;
@@ -218,38 +266,39 @@
     }
     textarea {
       width: 100%;
-      min-height: clamp(260px, 45vh, 480px);
-      padding: clamp(16px, 3.8vw, 22px);
-      font-size: clamp(1rem, 3.3vw, 1.08rem);
+      min-height: clamp(260px, 42vh, 480px);
+      padding: clamp(18px, 3.8vw, 24px);
+      font-size: clamp(1.02rem, 3.3vw, 1.1rem);
       border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(153, 164, 214, 0.38);
       background: var(--surface-strong);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
       resize: vertical;
-      transition: border 0.2s ease, box-shadow 0.2s ease;
+      transition: border var(--transition), box-shadow var(--transition), transform var(--transition);
     }
     textarea:focus {
       outline: none;
-      border-color: rgba(91, 99, 255, 0.6);
-      box-shadow: 0 0 0 4px rgba(91, 99, 255, 0.18);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(85, 103, 255, 0.18);
+      transform: translateY(-2px);
     }
     textarea::placeholder {
-      color: rgba(79, 79, 87, 0.55);
+      color: rgba(79, 79, 87, 0.5);
     }
     .stats {
       display: grid;
-      gap: clamp(14px, 2.4vw, 20px);
-      margin: clamp(18px, 3vw, 28px) 0;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(16px, 2.4vw, 22px);
+      margin: clamp(22px, 3vw, 32px) 0;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
     .box {
-      padding: clamp(14px, 2.6vw, 20px);
+      padding: clamp(16px, 2.6vw, 22px);
       border-radius: var(--radius-md);
       background: var(--surface-strong);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(162, 170, 207, 0.4);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(38, 45, 74, 0.08);
+      box-shadow: var(--shadow-soft);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
@@ -257,9 +306,9 @@
       content: "";
       position: absolute;
       inset: -60% 60% 60% -60%;
-      background: radial-gradient(circle at top left, rgba(91, 99, 255, 0.18), transparent 60%);
+      background: radial-gradient(circle at top left, rgba(85, 103, 255, 0.18), transparent 60%);
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--transition);
       pointer-events: none;
     }
     .box:hover::after {
@@ -267,23 +316,24 @@
     }
     @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
       .wrap {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.78));
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.8));
       }
       .box {
-        background: linear-gradient(140deg, rgba(255, 255, 255, 0.98), rgba(246, 248, 255, 0.82));
+        background: linear-gradient(140deg, rgba(255, 255, 255, 0.98), rgba(246, 248, 255, 0.86));
       }
     }
     .box strong {
       display: block;
-      font-size: clamp(1.4rem, 4vw, 1.8rem);
-      margin-top: 6px;
-      letter-spacing: 0.03em;
+      font-size: clamp(1.48rem, 4vw, 1.9rem);
+      margin-top: 8px;
+      letter-spacing: 0.02em;
+      font-variant-numeric: tabular-nums;
     }
     .box span {
       display: block;
-      color: var(--text-sub);
-      font-size: 0.92rem;
-      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
     .actions {
@@ -292,9 +342,10 @@
       gap: 12px;
       align-items: center;
       justify-content: flex-end;
+      margin-top: clamp(12px, 2vw, 18px);
     }
     button {
-      padding: 12px 22px;
+      padding: 13px 26px;
       border-radius: 999px;
       border: none;
       background: linear-gradient(135deg, var(--accent) 0%, #7a7fff 100%);
@@ -306,33 +357,49 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 18px 30px rgba(91, 99, 255, 0.25);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      box-shadow: 0 20px 36px rgba(85, 103, 255, 0.28);
+      transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
     }
     button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 24px 36px rgba(60, 63, 202, 0.28);
+      box-shadow: 0 26px 40px rgba(60, 63, 202, 0.28);
       filter: brightness(1.05);
     }
     button:active {
       transform: translateY(0);
-      box-shadow: 0 14px 20px rgba(60, 63, 202, 0.22);
+      box-shadow: 0 18px 24px rgba(60, 63, 202, 0.24);
+    }
+    button:focus-visible {
+      outline: 3px solid rgba(85, 103, 255, 0.35);
+      outline-offset: 3px;
+    }
+    .button-ghost {
+      background: rgba(255, 255, 255, 0.4);
+      color: var(--accent);
+      border: 1px solid rgba(143, 156, 220, 0.5);
+      box-shadow: none;
+    }
+    .button-ghost:hover {
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: none;
     }
     footer {
-      margin-top: clamp(24px, 4vw, 40px);
+      margin-top: clamp(26px, 4vw, 44px);
       color: var(--text-sub);
       font-size: clamp(0.85rem, 2.8vw, 0.96rem);
       display: flex;
       gap: 12px;
       align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
     .badge {
       padding: 6px 12px;
       border-radius: 999px;
-      background: rgba(91, 99, 255, 0.12);
+      background: var(--accent-soft);
       color: var(--accent);
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
     .global-nav {
@@ -348,17 +415,17 @@
       gap: 10px;
       padding: 10px 12px;
       border-radius: 999px;
-      background: rgba(15, 14, 43, 0.18);
-      box-shadow: 0 22px 38px rgba(24, 27, 58, 0.16);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(19, 23, 55, 0.18);
+      box-shadow: 0 22px 42px rgba(24, 27, 58, 0.16);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
     }
     .nav-button {
       flex: 1;
       border: none;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.6);
       color: var(--text-main);
       font-weight: 700;
       letter-spacing: 0.05em;
@@ -369,18 +436,18 @@
       justify-content: center;
       gap: 2px;
       padding: 8px 12px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
       cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
     }
     .nav-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 18px 26px rgba(56, 63, 146, 0.22);
+      box-shadow: 0 18px 28px rgba(56, 63, 146, 0.22);
     }
     .nav-button.is-active {
-      background: linear-gradient(135deg, #5b63ff 0%, #ff8ade 100%);
+      background: linear-gradient(135deg, #5567ff 0%, #ff85cc 100%);
       color: #fff;
-      box-shadow: 0 18px 32px rgba(91, 99, 255, 0.35);
+      box-shadow: 0 20px 34px rgba(85, 103, 255, 0.32);
     }
     .nav-button span {
       font-size: 0.68rem;
@@ -405,10 +472,10 @@
     .game-canvas-wrap {
       position: relative;
       border-radius: var(--radius-md);
-      padding: clamp(18px, 3vw, 26px);
-      background: rgba(17, 22, 58, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 25px 45px rgba(26, 22, 66, 0.28);
+      padding: clamp(20px, 3.2vw, 28px);
+      background: linear-gradient(160deg, rgba(16, 21, 60, 0.82), rgba(40, 33, 94, 0.74));
+      border: 1px solid rgba(122, 132, 210, 0.28);
+      box-shadow: 0 28px 52px rgba(26, 22, 66, 0.32);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -419,9 +486,9 @@
       height: auto;
       aspect-ratio: 10 / 18;
       display: block;
-      background: rgba(8, 9, 30, 0.92);
-      border-radius: 12px;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      background: rgba(8, 9, 30, 0.94);
+      border-radius: 14px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
       image-rendering: pixelated;
     }
     .game-info {
@@ -434,16 +501,32 @@
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
     .game-scoreboard .box {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 18px 32px rgba(28, 30, 82, 0.18);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 22px 34px rgba(28, 30, 82, 0.18);
     }
     .game-banner {
       margin: 0;
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-radius: var(--radius-md);
-      background: rgba(91, 99, 255, 0.12);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(162, 170, 207, 0.35);
+      color: var(--text-main);
+      box-shadow: var(--shadow-soft);
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+    .game-banner strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: rgba(73, 81, 155, 0.16);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(122, 132, 210, 0.24);
       color: var(--accent-dark);
-      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
     }
     .game-instruction {
       margin: 0;
@@ -532,6 +615,9 @@
         padding: 7px 10px;
         font-size: 0.88rem;
       }
+      .info-badges {
+        grid-template-columns: minmax(0, 1fr);
+      }
       .game-touch-grid {
         gap: 6px;
       }
@@ -543,6 +629,11 @@
       }
       .game-touch-text {
         font-size: 0.64rem;
+      }
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
       }
     }
     @media (max-width: 480px) {
@@ -578,11 +669,25 @@
             </svg>
           </span>
           <div id="counter-title">
-            <small>Word Party</small>
-            文字カウント・ショータイム
+            <small>Creator Suite</small>
+            文字カウント・コントロールルーム
           </div>
         </div>
-        <p>文章づくりを盛り上げるステージへようこそ！リアルタイムで文字数・行数・単語数を測りながら、あなたのストーリーをノリノリに仕上げましょう。</p>
+        <p class="section-description">執筆、SNS投稿、企画書づくりまで。入力したテキストをリアルタイムに分析し、整えやすいリズムで可視化します。</p>
+        <ul class="info-badges" role="list">
+          <li>
+            <span class="info-title">リアルタイム分析</span>
+            <span class="info-sub">文字数・行数・単語数を入力のたびに瞬時に更新します。</span>
+          </li>
+          <li>
+            <span class="info-title">集中をキープ</span>
+            <span class="info-sub">視線移動を最小限に抑えたシンプルなレイアウトで、作業に没頭できます。</span>
+          </li>
+          <li>
+            <span class="info-title">PWA 対応</span>
+            <span class="info-sub">インストールしておけば、ネットがない環境でも快適にカウントできます。</span>
+          </li>
+        </ul>
       </header>
 
       <section class="mascot" aria-live="polite">
@@ -592,14 +697,14 @@
           </div>
           <div class="mascot-hand"></div>
         </div>
-        <p class="mascot-message" id="mascot-message">ステージは整ったよ！どんな文章で盛り上げる？</p>
+        <p class="mascot-message" id="mascot-message">準備は万端です。最初の一文から、あなたの言葉で画面を彩ってください。</p>
       </section>
 
-      <textarea id="t" placeholder="ここに文章を投げ込んで、言葉のショーを始めよう！"></textarea>
+      <textarea id="t" placeholder="ここに文章を入力して、文章の質感とボリュームを確かめましょう。"></textarea>
 
       <div class="stats" aria-live="polite">
         <div class="box">
-          <span>Character</span>
+          <span>Characters</span>
           <strong id="chars">0</strong>
         </div>
         <div class="box">
@@ -627,7 +732,7 @@
 
       <footer>
         <span class="badge">PWA Ready</span>
-        オフラインでも利用OK。ホーム画面に置けば、いつでもどこでも文字ライブを楽しめます。
+        ホーム画面に追加すれば、オフラインの打ち合わせや移動中でもスマートにカウントできます。
       </footer>
     </section>
 
@@ -643,11 +748,25 @@
             </svg>
           </span>
           <div id="game-title">
-            <small>Arcade Time</small>
-            ポップドロップ・パズル
+            <small>Break Time</small>
+            フォーカスリセット・ミニゲーム
           </div>
         </div>
-        <p>キラキラ降るブロックをさばいてハイスコアを狙う、ライトなテトリス風ミニゲーム。文章制作のクールダウンに、ちょっとしたエンタメタイムをどうぞ！</p>
+        <p class="section-description">リズムよく降りてくるブロックを整理し、思考をクールダウン。集中が切れたときのリフレッシュにちょうど良い、ライトなテトリス風ゲームです。</p>
+        <ul class="info-badges" role="list">
+          <li>
+            <span class="info-title">ワンクリック起動</span>
+            <span class="info-sub">スタートボタンを押すだけで、すぐにプレイを始められます。</span>
+          </li>
+          <li>
+            <span class="info-title">直感操作</span>
+            <span class="info-sub">キーボードでもタッチでも快適。ルールを覚える必要はありません。</span>
+          </li>
+          <li>
+            <span class="info-title">集中を再点火</span>
+            <span class="info-sub">短時間のゲームで頭をリセットし、次の文章作成にスムーズに戻れます。</span>
+          </li>
+        </ul>
       </header>
 
       <div class="game-layout">
@@ -679,7 +798,7 @@
           </div>
         </div>
         <div class="game-info">
-          <p class="game-banner" id="game-banner">ゲームスタートを押して、ブロックショーを開演しよう！</p>
+          <p class="game-banner" id="game-banner"><strong aria-hidden="true">How to Play</strong> ゲームスタートを押してウォームアップ。ブロックを整理してコンボをつなぎ、高得点を狙いましょう。</p>
           <div class="game-scoreboard">
             <div class="box">
               <span>Score</span>
@@ -694,8 +813,8 @@
               <strong id="game-level">1</strong>
             </div>
           </div>
-          <p class="game-instruction">矢印キーで移動＆回転（上キー）。スペースキーで一気にドロップ！音は出ないので静かな場所でも安心です。</p>
-          <button id="game-start" type="button">ゲームスタート／リスタート</button>
+          <p class="game-instruction">矢印キーで移動・回転（上キー）、スペースキーでハードドロップ。タッチ操作も可能なので、どこでも静かに楽しめます。</p>
+          <button id="game-start" type="button">ゲームスタート / リスタート</button>
         </div>
       </div>
     </section>
@@ -738,33 +857,33 @@
     const defaultReaction = {
       src: 'assets/reaction-waiting.svg',
       alt: 'わくわくして入力を待つ表情',
-      message: 'ステージは整ったよ！どんな文章で盛り上げる？'
+      message: '準備は整いました。最初の一文でストーリーの流れをつくりましょう。'
     };
     const reactions = [
       {
         src: 'assets/reaction-happy.svg',
         alt: '嬉しそうに微笑む表情',
-        message: 'リズム最高！そのままビート刻んで！'
+        message: 'テンポが出てきました。この勢いで文章の骨格を整えてみましょう。'
       },
       {
         src: 'assets/reaction-energetic.svg',
         alt: '勢いづいてやる気に満ちた表情',
-        message: '勢いが出てきたよ！このままクライマックスへ！'
+        message: 'ボリュームが乗ってきました。段落のリズムを意識するとさらに読みやすくなります。'
       },
       {
         src: 'assets/reaction-surprised.svg',
         alt: '驚いて目を丸くする表情',
-        message: 'わぁ、キラーワードの雨が降ってる〜！'
+        message: 'キーワードが光っています。気になるフレーズは別案としてメモしておきましょう。'
       },
       {
         src: 'assets/reaction-calm.svg',
         alt: '穏やかに見守る表情',
-        message: '深呼吸してステージを丁寧に整えよう。'
+        message: '深呼吸して、全体の構成を俯瞰しましょう。落ち着いた視点が仕上がりを磨きます。'
       },
       {
         src: 'assets/reaction-hopeful.svg',
         alt: '希望に満ちた微笑みの表情',
-        message: 'あとちょっとでフィナーレの予感だよ〜！'
+        message: '完成まであと少し。仕上げの推敲で、言葉がさらに洗練されます。'
       }
     ];
     let previousReactionIndex = -1;
